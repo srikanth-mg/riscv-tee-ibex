@@ -9,21 +9,21 @@ Hardware-Enforced Trusted Execution Environment for the Ibex RISC-V Core
 A complete, open-source RTL implementation of a hardware-enforced Trusted Execution Environment (TEE) designed as an integration-ready IP block for the lowRISC Ibex RISC-V core. The design eliminates the timing side-channel inherent to conventional priority-encoded PMP through a parallel-match architecture, independently validated by the post-synthesis critical-path report.
 ---
 Why this project
-Commercial TEEs (Intel SGX, ARM TrustZone) are proprietary at the hardware level. Open RISC-V academic designs (Sanctum, Keystone) typically rely on existing PMP implementations whose access time leaks which memory region matched through data-dependent comparator depth. This work replaces the standard cascading-MUX PMP with a balanced-tree parallel-match structure that produces constant logic depth across all PMP entries, eliminating the timing side-channel — and proves the property in synthesized hardware, not just in argument.
+Commercial TEEs (Intel SGX, ARM TrustZone) are proprietary at the hardware level. Open RISC-V academic designs (Sanctum, Keystone) typically rely on existing PMP implementations whose access time leaks which memory region matched through data-dependent comparator depth. This work replaces the standard cascading-MUX PMP with a balanced-tree parallel-match structure that produces constant logic depth across all PMP entries, eliminating the timing side-channel - and proves the property in synthesized hardware, not just in argument.
 Results
 Metric	Value	Status
 Tests passing	6 / 6	✅
 Synthesis errors	0	✅
 Critical warnings	0	✅
-Slice LUTs	3,514 (6.61%)	—
-Slice Registers	3,172 (2.98%)	—
-Target frequency	50 MHz	—
+Slice LUTs	3,514 (6.61%)	-
+Slice Registers	3,172 (2.98%)	-
+Target frequency	50 MHz	-
 WNS (setup)	+2.680 ns	✅ MET
 WHS (hold)	+0.103 ns	✅ MET
 Failing endpoints	0 / 6,243	✅
 Critical path	13 uniform logic levels	constant-time
 Target: Xilinx Zynq-7020 (`xc7z020clg400-1`), speed grade −1, Vivado 2023.1.
-The critical path traverses 13 logic levels from a PMP entry register through the parallel-match comparator network to `pipeline\_flush\_o`. This depth is uniform across all 16 PMP entries — directly observable in the synthesis report as evidence of the constant-time property.
+The critical path traverses 13 logic levels from a PMP entry register through the parallel-match comparator network to `pipeline\_flush\_o`. This depth is uniform across all 16 PMP entries - directly observable in the synthesis report as evidence of the constant-time property.
 Architecture
 ```
                     ┌─────────────────────────────────────────────┐
@@ -41,10 +41,10 @@ Architecture
                     └─────────────────────────────────────────────┘
 ```
 Four sub-modules cooperate behind `tee\_top`:
-`tee\_security\_engine` — 14-state hardware FSM orchestrating enclave lifecycle (`CREATE`, `ENTER`, `EXIT`, `DESTROY`, `FORWARD`). Auto-inferred as one-hot by Vivado, providing Hamming-distance resistance to single-bit fault transitions.
-`tee\_pmp\_controller` — parallel-match PMP with 16 entries. All comparators evaluated simultaneously, balanced-tree priority encoding produces constant 13-level logic depth.
-`tee\_csr\_unit` — standard M-mode CSRs (`mstatus`, `mtvec`, `mepc`, `mcause`) plus 4 custom enclave CSRs in the RISC-V reserved vendor space (`0x7C0`–`0x7C3`).
-`tee\_register\_file` — 32×32-bit main register file paired with a 31×32-bit shadow bank for single-cycle context save and restore. The shadow bank has no bus address — structurally inaccessible to software.
+`tee\_security\_engine` - 14-state hardware FSM orchestrating enclave lifecycle (`CREATE`, `ENTER`, `EXIT`, `DESTROY`, `FORWARD`). Auto-inferred as one-hot by Vivado, providing Hamming-distance resistance to single-bit fault transitions.
+`tee\_pmp\_controller` - parallel-match PMP with 16 entries. All comparators evaluated simultaneously, balanced-tree priority encoding produces constant 13-level logic depth.
+`tee\_csr\_unit` - standard M-mode CSRs (`mstatus`, `mtvec`, `mepc`, `mcause`) plus 4 custom enclave CSRs in the RISC-V reserved vendor space (`0x7C0`–`0x7C3`).
+`tee\_register\_file` - 32×32-bit main register file paired with a 31×32-bit shadow bank for single-cycle context save and restore. The shadow bank has no bus address - structurally inaccessible to software.
 Key design decisions
 Parallel-match PMP
 A canonical PMP implementation checks each entry sequentially in priority order:
@@ -53,7 +53,7 @@ A canonical PMP implementation checks each entry sequentially in priority order:
                   ^^             ^^^^^^^^^^^^
                   fast           slow (variable depth)
 ```
-This produces data-dependent propagation delay: an access matching entry 0 traverses 1 logic level, an access matching entry 15 traverses up to 16. An attacker measuring access latency learns which PMP entry matched — a timing side-channel.
+This produces data-dependent propagation delay: an access matching entry 0 traverses 1 logic level, an access matching entry 15 traverses up to 16. An attacker measuring access latency learns which PMP entry matched - a timing side-channel.
 The parallel-match implementation flattens this to a balanced tree:
 ```
                   E0  ─┐
@@ -72,7 +72,7 @@ Address	Name	Purpose
 `0x7C1`	`menclave\_activate`	Activation flag, set on `ENTER`
 `0x7C2`	`menclavebase`	Base address of active enclave region
 `0x7C3`	`menclavebound`	Upper bound of active enclave region
-`U`-mode reads return zero; `U`-mode writes raise `TRAP\_ILLEGAL\_INST`. The SE writes these through a sideband path on FSM transitions — no software in the loop.
+`U`-mode reads return zero; `U`-mode writes raise `TRAP\_ILLEGAL\_INST`. The SE writes these through a sideband path on FSM transitions - no software in the loop.
 Threat model
 In scope: compromised U-mode applications, memory snooping by non-enclave processes, register-state leakage across context switches, PMP timing side-channels.
 Out of scope: compromised M-mode firmware (root of trust by construction), physical attacks (probing, fault injection), software bugs inside the enclave, remote attestation with cryptographic signing.
@@ -119,30 +119,34 @@ open\_run synth\_1
 report\_utilization     -file util.rpt
 report\_timing\_summary  -file timing.rpt
 ```
-Testbench summary
+# Testbench summary
 #	Test	What it verifies
-1	Reset	Post-reset state of FSM, registers, privilege
-2	CSR R/W	Read-after-write to MTVEC
-3	PMP M-mode	M-mode load bypasses PMP (expected behavior)
-4	ecall FSM	FSM advances out of `SE\_IDLE` on ecall trap
-5	Reg write	Read-after-write through register file
-6	FSM return	FSM returns to `SE\_IDLE` after lifecycle ops
+1]	Reset	Post-reset state of FSM, registers, privilege
+2]	CSR R/W	Read-after-write to MTVEC
+3]	PMP M-mode	M-mode load bypasses PMP (expected behavior)
+4]	ecall FSM	FSM advances out of `SE\_IDLE` on ecall trap
+5]	Reg write	Read-after-write through register file
+6]	FSM return	FSM returns to `SE\_IDLE` after lifecycle ops
 All 6 tests pass after the integration patches described in commit history (`ecall\_a3` wiring through `tee\_top`, `x0` write gating in `tee\_register\_file`).
-Limitations / future work
-Standalone delivery. TEE is a complete IP block but is not yet integrated into the Ibex pipeline. Three boundary integration points are documented: PMP override into the load/store unit, the CSR bus, and the ecall trap path.
-Single-hart only. Multi-hart enclaves would require per-hart shadow banks and PMP entry partitioning.
-Local attestation only. Cryptographic remote attestation deferred — would require a hardware SHA core writing a sealed measurement CSR.
-Verification depth. Test 4 verifies FSM-leaves-IDLE behavior; full CREATE-commit observation requires exposing `enclave\_meta\_o` to the testbench (future-work item).
-Background
+
+# Limitations / future work
+Standalone delivery -> TEE is a complete IP block but is not yet integrated into the Ibex pipeline. Three boundary integration points are documented: PMP override into the load/store unit, the CSR bus, and the ecall trap path.
+Single-hart only -> Multi-hart enclaves would require per-hart shadow banks and PMP entry partitioning.
+Local attestation only -> Cryptographic remote attestation deferred - would require a hardware SHA core writing a sealed measurement CSR.
+Verification depth -> Test 4 verifies FSM-leaves-IDLE behavior; full CREATE-commit observation requires exposing `enclave\_meta\_o` to the testbench (future-work item).
+
+#Background
 Built as the M.S. Computer Engineering capstone project at Binghamton University, advised by Prof. Wenfeng Zhao. Influenced by:
 Costan, Lebedev, Devadas — Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
 Lee, Kohlbrenner, Shinde, Asanović, Song — Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
 Bourgeat et al. — MI6: Secure Enclaves in a Speculative Out-of-Order Processor (MICRO 2019)
 Weiser et al. — TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
 lowRISC contributors — Ibex Documentation
-License
+
+#License
 Apache License 2.0 — see LICENSE. Includes explicit patent grant and patent-retaliation clause, appropriate for hardware security IP.
-Author
-Srikanth (@srikanth-mg)
+
+#Author
+Srikanth Muthuvel Ganthimathi
 M.S. Computer Engineering, Binghamton University
 Advisor: Prof. Wenfeng Zhao
