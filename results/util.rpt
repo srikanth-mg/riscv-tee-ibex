@@ -165,19 +165,3 @@ Warning! LUT value is adjusted to account for LUT combining.
 +----------+------+---------------------+
 
 
-8. Black Boxes
---------------
-
-+----------+------+
-| Ref Name | Used |
-+----------+------+
-
-
-9. Instantiated Netlists
-------------------------
-
-+----------+------+
-| Ref Name | Used |
-+----------+------+
-
-
