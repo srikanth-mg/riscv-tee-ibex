@@ -1,4 +1,4 @@
-# Hardware-Enforced Trusted Execution Environment for the Ibex RISC-V Core
+# Hardware-Enforced Trusted Execution Environment (TEE) for the Ibex RISC-V Core
 
 ![Status](https://img.shields.io/badge/status-functional-success)
 ![Tests](https://img.shields.io/badge/tests-6%2F6%20passing-success)
