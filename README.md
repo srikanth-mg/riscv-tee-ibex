@@ -63,7 +63,7 @@ The parallel-match implementation flattens this to a balanced tree:
 ```
                   E0  ─┐
                   E1  ─┤
-                  E2  ─┤── Balanced ── grant
+                  E2  ─┤-> Balanced -> grant
                   ... ─┤    Tree
                   E15 ─┘
 ```
