@@ -144,7 +144,7 @@ Single-hart only -> Multi-hart enclaves would require per-hart shadow banks and 
 Local attestation only -> Cryptographic remote attestation deferred - would require a hardware SHA core writing a sealed measurement CSR.
 Verification depth -> Test 4 verifies FSM-leaves-IDLE behavior; full CREATE-commit observation requires exposing `enclave\_meta\_o` to the testbench (future-work item).
 
-#Background
+# Background
 Built as the M.S. Computer Engineering capstone project at Binghamton University, advised by Prof. Wenfeng Zhao. Influenced by:
 Costan, Lebedev, Devadas — Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
 Lee, Kohlbrenner, Shinde, Asanović, Song — Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
@@ -152,10 +152,10 @@ Bourgeat et al. — MI6: Secure Enclaves in a Speculative Out-of-Order Processor
 Weiser et al. — TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
 lowRISC contributors — Ibex Documentation
 
-#License
+# License
 Apache License 2.0 — see LICENSE. Includes explicit patent grant and patent-retaliation clause, appropriate for hardware security IP.
 
-#Author
+# Author
 Srikanth Muthuvel Ganthimathi
 M.S. Computer Engineering, Binghamton University
 Advisor: Prof. Wenfeng Zhao
