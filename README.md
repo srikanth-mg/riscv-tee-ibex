@@ -64,7 +64,7 @@ The parallel-match implementation flattens this to a balanced tree:
 ```
 All 16 entries are compared simultaneously; the critical path is uniform 13 levels regardless of which entry matches. Trade-off: more area (more comparators, more wires) in exchange for constant-time access. Measured cost: ~37% of total cells.
 Shadow register bank
-Conventional enclave context switch requires 31 store instructions to spill `x1`–`x31` to memory, then 31 loads on exit — roughly 62 cycles of memory traffic and an attack surface (the bus) through which register values transit.
+Conventional enclave context switch requires 31 store instructions to spill `x1`–`x31` to memory, then 31 loads on exit - roughly 62 cycles of memory traffic and an attack surface (the bus) through which register values transit.
 The shadow bank is a dedicated 31×32-bit register array internal to `tee\_register\_file` with no bus address. On `ENTER`, the SE latches main → shadow and pulses `rf\_scrub\_o` in a single cycle. On `EXIT`, the inverse. This is security by construction: there is no PMP rule that needs to "guard" the shadow bank because there is no addressable path to reach it.
 M-mode-only custom CSRs
 Address	Name	Purpose
@@ -121,12 +121,12 @@ report\_timing\_summary  -file timing.rpt
 ```
 # Testbench summary
 #	Test	What it verifies
-1]	Reset	Post-reset state of FSM, registers, privilege
-2]	CSR R/W	Read-after-write to MTVEC
-3]	PMP M-mode	M-mode load bypasses PMP (expected behavior)
-4]	ecall FSM	FSM advances out of `SE\_IDLE` on ecall trap
-5]	Reg write	Read-after-write through register file
-6]	FSM return	FSM returns to `SE\_IDLE` after lifecycle ops
+1)	Reset	Post-reset state of FSM, registers, privilege
+2)	CSR R/W	Read-after-write to MTVEC
+3)	PMP M-mode	M-mode load bypasses PMP (expected behavior)
+4)	ecall FSM	FSM advances out of `SE\_IDLE` on ecall trap
+5)	Reg write	Read-after-write through register file
+6)	FSM return	FSM returns to `SE\_IDLE` after lifecycle ops
 All 6 tests pass after the integration patches described in commit history (`ecall\_a3` wiring through `tee\_top`, `x0` write gating in `tee\_register\_file`).
 
 # Limitations / future work
