@@ -1,4 +1,5 @@
 Hardware-Enforced Trusted Execution Environment for the Ibex RISC-V Core
+
 ![Status](https://img.shields.io/badge/status-functional-success)
 ![Tests](https://img.shields.io/badge/tests-6%2F6%20passing-success)
 ![Synthesis](https://img.shields.io/badge/synthesis-0%20critical%20warnings-success)
@@ -6,6 +7,7 @@ Hardware-Enforced Trusted Execution Environment for the Ibex RISC-V Core
 ![FPGA](https://img.shields.io/badge/target-Zynq--7020-blue)
 ![Language](https://img.shields.io/badge/SystemVerilog-1720%20LOC-blueviolet)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
+
 A complete, open-source RTL implementation of a hardware-enforced Trusted Execution Environment (TEE) designed as an integration-ready IP block for the lowRISC Ibex RISC-V core. The design eliminates the timing side-channel inherent to conventional priority-encoded PMP through a parallel-match architecture, independently validated by the post-synthesis critical-path report.
 ---
 Why this project
