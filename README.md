@@ -10,7 +10,7 @@
 
 A complete, open-source RTL implementation of a hardware-enforced Trusted Execution Environment (TEE) designed as an integration-ready IP block for the lowRISC Ibex RISC-V core. The design eliminates the timing side-channel inherent to conventional priority-encoded PMP through a parallel-match architecture, independently validated by the post-synthesis critical-path report.
 ---
-Why this project
+# Why this project
 Commercial TEEs (Intel SGX, ARM TrustZone) are proprietary at the hardware level. Open RISC-V academic designs (Sanctum, Keystone) typically rely on existing PMP implementations whose access time leaks which memory region matched through data-dependent comparator depth. This work replaces the standard cascading-MUX PMP with a balanced-tree parallel-match structure that produces constant logic depth across all PMP entries, eliminating the timing side-channel - and proves the property in synthesized hardware, not just in argument.
 Results
 Metric	Value	Status
