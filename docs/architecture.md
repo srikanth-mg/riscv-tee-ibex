@@ -22,10 +22,10 @@ The original design encoded `ENTER` as two states: `ENTER_SAVE_CTX` (latch shado
 This produced a **race condition**: in the single-state-save-and-scrub formulation, the shadow bank latched its inputs from `regs_q` at the same clock edge that `regs_q` was being scrubbed. Whether the shadow captured pre-scrub or post-scrub values was timing-dependent.
 
 The fix splits the operation across distinct cycles:
-- `ENTER_SAVE_CTX` — assert `rf_save_o`, latch `regs_q` into shadow bank
-- `ENTER_SCRUB` — assert `rf_scrub_o`, clear `regs_q` to zero
-- `ENTER_PMP` — issue fast PMP activation sideband write
-- `ENTER_LAUNCH` — trigger `mret`, transition to U-mode
+- `ENTER_SAVE_CTX` - assert `rf_save_o`, latch `regs_q` into shadow bank
+- `ENTER_SCRUB` - assert `rf_scrub_o`, clear `regs_q` to zero
+- `ENTER_PMP` - issue fast PMP activation sideband write
+- `ENTER_LAUNCH` - trigger `mret`, transition to U-mode
 
 The trade-off is one extra cycle per enclave entry in exchange for deterministic behavior. The four-state split also makes the FSM easier to verify with concurrent assertions: each phase has a single observable side effect.
 
@@ -39,7 +39,7 @@ Vivado auto-infers a one-hot encoding for the SE FSM without requiring `(* fsm_e
 
 The 14-state FSM requires 14 flip-flops in one-hot encoding versus 4 in binary encoding. The area cost is negligible (10 extra FFs); the fault-tolerance benefit is meaningful for a security FSM.
 
-## 2. Parallel-Match PMP — Implementation Details
+## 2. Parallel-Match PMP - Implementation Details
 
 ### Comparator network
 
