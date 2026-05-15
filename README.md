@@ -12,21 +12,24 @@ A complete, open-source RTL implementation of a hardware-enforced Trusted Execut
 ---
 # Why this project
 Commercial TEEs (Intel SGX, ARM TrustZone) are proprietary at the hardware level. Open RISC-V academic designs (Sanctum, Keystone) typically rely on existing PMP implementations whose access time leaks which memory region matched through data-dependent comparator depth. This work replaces the standard cascading-MUX PMP with a balanced-tree parallel-match structure that produces constant logic depth across all PMP entries, eliminating the timing side-channel - and proves the property in synthesized hardware, not just in argument.
-Results
+
+# Results
 Metric	Value	Status
-Tests passing	6 / 6	✅
-Synthesis errors	0	✅
-Critical warnings	0	✅
-Slice LUTs	3,514 (6.61%)	-
-Slice Registers	3,172 (2.98%)	-
-Target frequency	50 MHz	-
-WNS (setup)	+2.680 ns	✅ MET
-WHS (hold)	+0.103 ns	✅ MET
-Failing endpoints	0 / 6,243	✅
-Critical path	13 uniform logic levels	constant-time
+1) Tests passing	6 / 6	✅
+2) Synthesis errors	0	✅
+3) Critical warnings	0	✅
+4) Slice LUTs	3,514 (6.61%)	
+5) Slice Registers	3,172 (2.98%)
+6) Target frequency	50 MHz
+7) WNS (setup)	+2.680 ns	✅ MET
+8) WHS (hold)	+0.103 ns	✅ MET
+9) Failing endpoints	0 / 6,243	✅
+10) Critical path	13 uniform logic levels	constant-time
+
 Target: Xilinx Zynq-7020 (`xc7z020clg400-1`), speed grade −1, Vivado 2023.1.
 The critical path traverses 13 logic levels from a PMP entry register through the parallel-match comparator network to `pipeline\_flush\_o`. This depth is uniform across all 16 PMP entries - directly observable in the synthesis report as evidence of the constant-time property.
-Architecture
+
+# Architecture
 ```
                     ┌─────────────────────────────────────────────┐
                     │                tee_top                      │
@@ -47,8 +50,8 @@ Four sub-modules cooperate behind `tee\_top`:
 `tee\_pmp\_controller` - parallel-match PMP with 16 entries. All comparators evaluated simultaneously, balanced-tree priority encoding produces constant 13-level logic depth.
 `tee\_csr\_unit` - standard M-mode CSRs (`mstatus`, `mtvec`, `mepc`, `mcause`) plus 4 custom enclave CSRs in the RISC-V reserved vendor space (`0x7C0`–`0x7C3`).
 `tee\_register\_file` - 32×32-bit main register file paired with a 31×32-bit shadow bank for single-cycle context save and restore. The shadow bank has no bus address - structurally inaccessible to software.
-Key design decisions
-Parallel-match PMP
+## Key design decisions
+# Parallel-match PMP
 A canonical PMP implementation checks each entry sequentially in priority order:
 ```
                   E0 → E1 → E2 → ... → E15 → grant
@@ -65,20 +68,24 @@ The parallel-match implementation flattens this to a balanced tree:
                   E15 ─┘
 ```
 All 16 entries are compared simultaneously; the critical path is uniform 13 levels regardless of which entry matches. Trade-off: more area (more comparators, more wires) in exchange for constant-time access. Measured cost: ~37% of total cells.
-Shadow register bank
+
+# Shadow register bank
 Conventional enclave context switch requires 31 store instructions to spill `x1`–`x31` to memory, then 31 loads on exit - roughly 62 cycles of memory traffic and an attack surface (the bus) through which register values transit.
 The shadow bank is a dedicated 31×32-bit register array internal to `tee\_register\_file` with no bus address. On `ENTER`, the SE latches main → shadow and pulses `rf\_scrub\_o` in a single cycle. On `EXIT`, the inverse. This is security by construction: there is no PMP rule that needs to "guard" the shadow bank because there is no addressable path to reach it.
-M-mode-only custom CSRs
+
+# M-mode-only custom CSRs
 Address	Name	Purpose
 `0x7C0`	`menclaveid`	4-bit ID of the currently active enclave
 `0x7C1`	`menclave\_activate`	Activation flag, set on `ENTER`
 `0x7C2`	`menclavebase`	Base address of active enclave region
 `0x7C3`	`menclavebound`	Upper bound of active enclave region
 `U`-mode reads return zero; `U`-mode writes raise `TRAP\_ILLEGAL\_INST`. The SE writes these through a sideband path on FSM transitions - no software in the loop.
-Threat model
+
+# Threat model
 In scope: compromised U-mode applications, memory snooping by non-enclave processes, register-state leakage across context switches, PMP timing side-channels.
 Out of scope: compromised M-mode firmware (root of trust by construction), physical attacks (probing, fault injection), software bugs inside the enclave, remote attestation with cryptographic signing.
-Repository structure
+
+# Repository structure
 ```
 riscv-tee-ibex/
 ├── README.md                   ← this file
@@ -98,7 +105,7 @@ riscv-tee-ibex/
 └── docs/
     └── architecture.md         ← additional design notes
 ```
-How to reproduce
+# How to reproduce
 Prerequisites
 Xilinx Vivado 2023.1 (Windows or Linux)
 Target part `xc7z020clg400-1` (Zynq-7020, speed grade −1)
