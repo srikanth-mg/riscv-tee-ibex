@@ -27,7 +27,7 @@ The critical path traverses 13 logic levels from a PMP entry register through th
 Architecture
 ```
                     ┌─────────────────────────────────────────────┐
-                    │                tee\_top                      │
+                    │                tee_top                      │
                     │  ┌─────────────────┐   ┌─────────────────┐  │
    IF/EX ────────►  │  │  Security       │   │  PMP            │  │
    Trap ─────────►  │  │  Engine (FSM)   │   │  Controller     │  │
