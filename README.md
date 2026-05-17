@@ -146,11 +146,11 @@ Verification depth -> Test 4 verifies FSM-leaves-IDLE behavior; full CREATE-comm
 
 # Background
 Built as the M.S. Computer Engineering capstone project at Binghamton University, advised by Prof. Wenfeng Zhao. Influenced by:
-Costan, Lebedev, Devadas — Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
-Lee, Kohlbrenner, Shinde, Asanović, Song — Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
-Bourgeat et al. — MI6: Secure Enclaves in a Speculative Out-of-Order Processor (MICRO 2019)
-Weiser et al. — TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
-lowRISC contributors — Ibex Documentation
+1) Costan, Lebedev, Devadas — Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
+2) Lee, Kohlbrenner, Shinde, Asanović, Song — Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
+3) Bourgeat et al. — MI6: Secure Enclaves in a Speculative Out-of-Order Processor (MICRO 2019)
+4) Weiser et al. — TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
+5) lowRISC contributors — Ibex Documentation
 
 # License
 Apache License 2.0 — see LICENSE. Includes explicit patent grant and patent-retaliation clause, appropriate for hardware security IP.
