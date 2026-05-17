@@ -20,7 +20,7 @@ Metric	Value	Status
 3) Critical warnings	0	✅
 4) Slice LUTs	3,514 (6.61%)	
 5) Slice Registers	3,172 (2.98%)
-6) Target frequency	50 MHz
+6) Target frequency	~57 MHz
 7) WNS (setup)	+0.18 ns	✅ MET
 8) WHS (hold)	+0.103 ns	✅ MET
 9) Failing endpoints	0 / 6,243	✅
@@ -119,7 +119,7 @@ source synth/create\_project.tcl
 # Behavioral simulation — expect "RESULTS: 6/6 passed"
 launch\_simulation
 
-# Synthesis — expect "WNS +2.680 ns MET, 0 critical warnings"
+# Synthesis — expect "WNS +0.18 ns MET, 0 critical warnings"
 launch\_runs synth\_1 -jobs 4
 wait\_on\_run synth\_1
 
