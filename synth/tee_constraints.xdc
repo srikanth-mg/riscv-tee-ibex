@@ -12,7 +12,7 @@
 ## ----------------------------------------------------------------------------
 ## clk_i is the master clock for the entire TEE design.
 
-create_clock -period 20.000 -name sys_clk -waveform {0.000 10.000} [get_ports clk_i]
+create_clock -period 17.500 -name sys_clk -waveform {0.000 10.000} [get_ports clk_i]
 
 ## ----------------------------------------------------------------------------
 ## Clock uncertainty (jitter + skew margin)
