@@ -21,7 +21,7 @@ Metric	Value	Status
 4) Slice LUTs	3,514 (6.61%)	
 5) Slice Registers	3,172 (2.98%)
 6) Target frequency	50 MHz
-7) WNS (setup)	+2.680 ns	✅ MET
+7) WNS (setup)	+0.18 ns	✅ MET
 8) WHS (hold)	+0.103 ns	✅ MET
 9) Failing endpoints	0 / 6,243	✅
 10) Critical path	13 uniform logic levels	constant-time
