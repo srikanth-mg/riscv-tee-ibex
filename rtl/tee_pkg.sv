@@ -1,5 +1,5 @@
 // ============================================================================
-// tee_pkg.sv — TEE Package
+// tee_pkg.sv - TEE Package
 //
 // Shared types, constants, and parameters used across all TEE modules.
 // Import this in every module: import tee_pkg::*;

@@ -47,6 +47,6 @@ Thumbs.db
 *.code-workspace
 
 # =============================================================================
-# Reports — uncomment if you want to commit reference reports
+# Reports - uncomment if you want to commit reference reports
 # =============================================================================
 # results/*.rpt

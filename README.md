@@ -54,7 +54,7 @@ Four sub-modules cooperate behind `tee\_top`:
 ## Parallel-match PMP
 A canonical PMP implementation checks each entry sequentially in priority order:
 ```
-                  E0 → E1 → E2 → ... → E15 → grant
+                  E0 -> E1 -> E2 -> ... -> E15 -> grant
                   ^^             ^^^^^^^^^^^^
                   fast           slow (variable depth)
 ```
@@ -71,7 +71,7 @@ All 16 entries are compared simultaneously; the critical path is uniform 13 leve
 
 ## Shadow register bank
 Conventional enclave context switch requires 31 store instructions to spill `x1`–`x31` to memory, then 31 loads on exit - roughly 62 cycles of memory traffic and an attack surface (the bus) through which register values transit.
-The shadow bank is a dedicated 31×32-bit register array internal to `tee\_register\_file` with no bus address. On `ENTER`, the SE latches main → shadow and pulses `rf\_scrub\_o` in a single cycle. On `EXIT`, the inverse. This is security by construction: there is no PMP rule that needs to "guard" the shadow bank because there is no addressable path to reach it.
+The shadow bank is a dedicated 31×32-bit register array internal to `tee\_register\_file` with no bus address. On `ENTER`, the SE latches main -> shadow and pulses `rf\_scrub\_o` in a single cycle. On `EXIT`, the inverse. This is security by construction: there is no PMP rule that needs to "guard" the shadow bank because there is no addressable path to reach it.
 
 ## M-mode-only custom CSRs
 Address	Name	Purpose
@@ -116,10 +116,10 @@ Run
 cd <path-to-riscv-tee-ibex>
 source synth/create\_project.tcl
 
-# Behavioral simulation — expect "RESULTS: 6/6 passed"
+# Behavioral simulation - expect "RESULTS: 6/6 passed"
 launch\_simulation
 
-# Synthesis — expect "WNS +0.18 ns MET, 0 critical warnings"
+# Synthesis - expect "WNS +0.18 ns MET, 0 critical warnings"
 launch\_runs synth\_1 -jobs 4
 wait\_on\_run synth\_1
 
@@ -146,14 +146,14 @@ Verification depth -> Test 4 verifies FSM-leaves-IDLE behavior; full CREATE-comm
 
 # Background
 Built as the M.S. Computer Engineering capstone project at Binghamton University, advised by Prof. Wenfeng Zhao. Influenced by:
-1) Costan, Lebedev, Devadas — Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
-2) Lee, Kohlbrenner, Shinde, Asanović, Song — Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
-3) Bourgeat et al. — MI6: Secure Enclaves in a Speculative Out-of-Order Processor (MICRO 2019)
-4) Weiser et al. — TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
-5) lowRISC contributors — Ibex Documentation
+1) Costan, Lebedev, Devadas - Sanctum: Minimal Hardware Extensions for Strong Software Isolation (USENIX Security 2016)
+2) Lee, Kohlbrenner, Shinde, Asanović, Song - Keystone: An Open Framework for Architecting Trusted Execution Environments (EuroSys 2020)
+3) Bourgeat et al. - MI6: Secure Enclaves in a Speculative Out-of-Order Processor (MICRO 2019)
+4) Weiser et al. - TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V (NDSS 2019)
+5) lowRISC contributors - Ibex Documentation
 
 # License
-Apache License 2.0 — see LICENSE. Includes explicit patent grant and patent-retaliation clause, appropriate for hardware security IP.
+Apache License 2.0 - see LICENSE. Includes explicit patent grant and patent-retaliation clause, appropriate for hardware security IP.
 
 # Author
 Srikanth Muthuvel Ganthimathi

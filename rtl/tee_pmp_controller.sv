@@ -1,5 +1,5 @@
 // ============================================================================
-// tee_pmp_controller.sv — Physical Memory Protection Controller
+// tee_pmp_controller.sv - Physical Memory Protection Controller
 //
 // Modified PMP implementation for TEE:
 //   1. Parallel address matching (all 16 entries checked simultaneously)
@@ -7,7 +7,7 @@
 //   3. Fast-path activation port for atomic PMP reconfiguration
 //
 // Interfaces with Ibex pipeline at IF stage (fetch check) and EX stage 
-// (load/store check). PMP check runs in parallel with memory access — 
+// (load/store check). PMP check runs in parallel with memory access - 
 // NOT an extra pipeline stage.
 //
 // RISC-V Privileged Spec v1.12, Section 3.7
@@ -23,7 +23,7 @@ module tee_pmp_controller
   input  logic                    rst_ni,
 
   // --------------------------------------------------------------------------
-  // Address check interface (from pipeline — two ports: IF and EX)
+  // Address check interface (from pipeline - two ports: IF and EX)
   // --------------------------------------------------------------------------
   // Instruction fetch check (IF stage)
   input  logic [ADDR_WIDTH-1:0]   if_addr_i,
@@ -102,7 +102,7 @@ module tee_pmp_controller
         pmp_addr_q[i] <= '0;
       end
     end else begin
-      // Fast-path activation (from Security Engine) — highest priority
+      // Fast-path activation (from Security Engine) - highest priority
       if (fast_activate_i) begin
         // Only write if entry is not locked
         if (!pmp_cfg_q[fast_pmp_idx_i].lock) begin
@@ -173,7 +173,7 @@ module tee_pmp_controller
   // Logic depth = log2(NUM_ENTRIES) = 4 levels for 16 entries.
   // Constant timing regardless of which entry matches.
   //
-  // This is implemented as a reverse loop — the last assignment wins,
+  // This is implemented as a reverse loop - the last assignment wins,
   // but since we go from high to low index, the lowest match takes priority.
   // Synthesis produces a fixed-depth priority tree.
   // ==========================================================================
@@ -216,7 +216,7 @@ module tee_pmp_controller
   //   - No match for M-mode: access GRANTED (M-mode has full access by default)
   // ==========================================================================
 
-  // IF stage (instruction fetch — needs X permission)
+  // IF stage (instruction fetch - needs X permission)
   always_comb begin
     if (!if_valid_i) begin
       if_granted_o = 1'b0;
@@ -237,14 +237,14 @@ module tee_pmp_controller
         if_granted_o = pmp_cfg_q[if_winner_idx].x;
         if_fault_o   = !pmp_cfg_q[if_winner_idx].x;
       end else begin
-        // No match → deny by default
+        // No match -> deny by default
         if_granted_o = 1'b0;
         if_fault_o   = 1'b1;
       end
     end
   end
 
-  // EX stage (data access — needs R or W permission)
+  // EX stage (data access - needs R or W permission)
   always_comb begin
     if (!ex_valid_i) begin
       ex_granted_o = 1'b0;
@@ -272,7 +272,7 @@ module tee_pmp_controller
         ex_granted_o = perm_ok;
         ex_fault_o   = !perm_ok;
       end else begin
-        // No match → deny by default
+        // No match -> deny by default
         ex_granted_o = 1'b0;
         ex_fault_o   = 1'b1;
       end

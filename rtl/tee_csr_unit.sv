@@ -1,5 +1,5 @@
 // ============================================================================
-// tee_csr_unit.sv — Control and Status Register Unit
+// tee_csr_unit.sv - Control and Status Register Unit
 //
 // Implements:
 //   - Standard M-mode CSRs: mstatus, mtvec, mepc, mcause, medeleg
@@ -8,7 +8,7 @@
 //
 // Privilege enforcement:
 //   - M-mode CSRs (0x300-0x3FF, 0x700-0x7FF) only accessible from M-mode
-//   - S/U-mode access to M-mode CSR → illegal instruction exception
+//   - S/U-mode access to M-mode CSR -> illegal instruction exception
 //
 // RISC-V Privileged Spec v1.12, Chapter 2 (CSR access) and Chapter 3 (M-mode)
 // ============================================================================
@@ -124,7 +124,7 @@ module tee_csr_unit
   assign mstatus_mie  = mstatus_q[3];
 
   // ==========================================================================
-  // Privilege Check — M-mode CSRs require M-mode access
+  // Privilege Check - M-mode CSRs require M-mode access
   // ==========================================================================
   logic csr_priv_ok;
   always_comb begin

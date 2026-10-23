@@ -1,10 +1,10 @@
 // ============================================================================
-// tee_security_engine.sv — Hardware Security Engine
+// tee_security_engine.sv - Hardware Security Engine
 //
 // Implements the enclave lifecycle as a dedicated hardware FSM.
 // Replaces the traditional software Security Monitor.
 //
-// Six phases: Boot → Create → Enter → Execute → Exit → Destroy
+// Six phases: Boot -> Create -> Enter -> Execute -> Exit -> Destroy
 //
 // Key advantages over software SM:
 //   - ~6 cycles per transition (vs ~100 cycles software)
@@ -96,7 +96,7 @@ module tee_security_engine
   // ==========================================================================
   se_state_e state_q, state_d;
 
-  // Enclave metadata table (in flip-flops — small, fast, hardware-protected)
+  // Enclave metadata table (in flip-flops - small, fast, hardware-protected)
   enclave_meta_t enc_table_q [NUM_ENCLAVES];
 
   // Shadow register bank for host context
@@ -202,7 +202,7 @@ module tee_security_engine
       enc_active_id_q <= enc_active_id_d;
       scrub_addr_q   <= scrub_addr_d;
 
-      // Shadow bank save (parallel — all 31 registers in one cycle)
+      // Shadow bank save (parallel - all 31 registers in one cycle)
       if (state_q == SE_ENTER_SAVE_CTX) begin
         for (int i = 1; i < 32; i++) begin
           shadow_regs_q[i] <= rf_rdata_i[i];
@@ -242,7 +242,7 @@ module tee_security_engine
   // FSM Combinational Logic (Next State + Outputs)
   // ==========================================================================
   always_comb begin
-    // Default outputs — all inactive
+    // Default outputs - all inactive
     state_d            = state_q;
     target_enc_d       = target_enc_q;
     current_op_d       = current_op_q;
@@ -275,7 +275,7 @@ module tee_security_engine
 
     case (state_q)
       // ================================================================
-      // IDLE — Waiting for ecall
+      // IDLE - Waiting for ecall
       // ================================================================
       SE_IDLE: begin
         if (ecall_insn_i) begin
@@ -306,7 +306,7 @@ module tee_security_engine
               else               state_d = SE_IDLE;
             end
             TEE_OP_NONE: begin
-              // Not a TEE ecall — forward to S-mode
+              // Not a TEE ecall - forward to S-mode
               forward_to_smode_o = 1'b1;
               state_d = SE_FORWARD_SYSCALL;
             end
@@ -338,7 +338,7 @@ module tee_security_engine
       end
 
       // ================================================================
-      // ENTER FLOW — Security-critical ordering
+      // ENTER FLOW - Security-critical ordering
       // ================================================================
       SE_ENTER_SAVE_CTX: begin
         // Parallel save happens in sequential block (shadow_regs_q <= rf_rdata_i)
@@ -370,12 +370,12 @@ module tee_security_engine
         mpp_wr_o     = PRIV_U;   // enclave runs in U-mode
         mpp_wr_en_o  = 1'b1;
 
-        mret_trigger_o = 1'b1;   // trigger mret → drops to U-mode
+        mret_trigger_o = 1'b1;   // trigger mret -> drops to U-mode
         state_d        = SE_IDLE;
       end
 
       // ================================================================
-      // EXIT FLOW — PMP revoked FIRST (security-critical ordering)
+      // EXIT FLOW - PMP revoked FIRST (security-critical ordering)
       // ================================================================
       SE_EXIT_REVOKE: begin
         // FIRST: Revoke PMP access before anything else
@@ -429,13 +429,13 @@ module tee_security_engine
         // Free PMP entry
         pmp_fast_activate_o = 1'b1;
         pmp_fast_idx_o      = enc_table_q[target_enc_q].pmp_idx;
-        pmp_fast_cfg_o      = 8'b0;  // OFF — disabled
+        pmp_fast_cfg_o      = 8'b0;  // OFF - disabled
 
         state_d = SE_IDLE;
       end
 
       // ================================================================
-      // FORWARD SYSCALL — Non-TEE ecall goes to S-mode
+      // FORWARD SYSCALL - Non-TEE ecall goes to S-mode
       // ================================================================
       SE_FORWARD_SYSCALL: begin
         // In full implementation: set sepc, scause, jump to stvec

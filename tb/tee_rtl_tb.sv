@@ -25,7 +25,7 @@ module tee_rtl_tb;
   // ==========================================================================
   // Parameters
   // ==========================================================================
-  localparam int unsigned CLK_PERIOD   = 10;   // 10 ns → 100 MHz
+  localparam int unsigned CLK_PERIOD   = 10;   // 10 ns -> 100 MHz
   localparam int unsigned DATA_WIDTH   = TEE_DATA_WIDTH;
   localparam int unsigned ADDR_WIDTH   = TEE_ADDR_WIDTH;
   localparam int unsigned NUM_PMP      = TEE_NUM_PMP;
@@ -302,7 +302,7 @@ module tee_rtl_tb;
     check("Privilege = M after reset",     current_priv == PRIV_M);
 
     // ------------------------------------------------------------------------
-    // TEST 2: CSR write/read — MTVEC
+    // TEST 2: CSR write/read - MTVEC
     // ------------------------------------------------------------------------
     $display("\n--- TEST 2: CSR write/read MTVEC ---");
     csr_write(CSR_MTVEC, 32'h0000_1000);
@@ -320,14 +320,14 @@ module tee_rtl_tb;
     end
 
   // ------------------------------------------------------------------------
-    // TEST 4: ecall pulse — observe FSM leaves IDLE
+    // TEST 4: ecall pulse - observe FSM leaves IDLE
     //   tee_top hijacks rs1/rs2/rd ports for ecall args:
     //     ecall_a0 ← rs1_data_o   (read x10)
     //     ecall_a1 ← rs2_data_o   (read x11)
     //     ecall_a2 ← rd_data_i    (driven directly)
     //     ecall_a3 ← ecall_a3_i   (driven directly via dedicated port)
     //
-    //   CREATE path is: SE_IDLE → CREATE_VALIDATE → CREATE_COMMIT → SE_IDLE
+    //   CREATE path is: SE_IDLE -> CREATE_VALIDATE -> CREATE_COMMIT -> SE_IDLE
     //   The FSM only spends ~2-3 cycles in non-IDLE states then returns,
     //   so we monitor for any non-IDLE state during a 10-cycle window.
     // ------------------------------------------------------------------------
@@ -336,7 +336,7 @@ module tee_rtl_tb;
     write_reg(5'd10, {28'd0, TEE_OP_CREATE});  // x10 = a0 = CREATE
     write_reg(5'd11, 32'd1);                    // x11 = a1 = enclave_id 1
 
-    // Now issue ecall — hold read addrs AND drive rd_data as a2 simultaneously
+    // Now issue ecall - hold read addrs AND drive rd_data as a2 simultaneously
     @(posedge clk);
     rs1_addr   = 5'd10;             // route x10 into ecall_a0
     rs2_addr   = 5'd11;             // route x11 into ecall_a1
@@ -378,7 +378,7 @@ module tee_rtl_tb;
     if (tests_failed == 0)
       $display("  >>> ALL PASSED <<<");
     else
-      $display("  >>> %0d FAILED — check waveform <<<", tests_failed);
+      $display("  >>> %0d FAILED - check waveform <<<", tests_failed);
     $display("================================================================\n");
 
     $finish;

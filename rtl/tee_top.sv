@@ -1,22 +1,22 @@
 // ============================================================================
-// tee_top.sv — Top-Level TEE Integration
+// tee_top.sv - Top-Level TEE Integration
 //
 // Integrates all TEE components into a single module that interfaces
 // with the Ibex pipeline (or simplified standalone pipeline for testing).
 //
 // Module hierarchy:
 //   tee_top
-//   ├── tee_security_engine   — Hardware SM FSM
-//   ├── tee_pmp_controller    — Parallel-match PMP
-//   ├── tee_csr_unit          — Standard + custom CSRs
-//   └── tee_register_file     — Register file with shadow bank + scrub
+//   ├── tee_security_engine   - Hardware SM FSM
+//   ├── tee_pmp_controller    - Parallel-match PMP
+//   ├── tee_csr_unit          - Standard + custom CSRs
+//   └── tee_register_file     - Register file with shadow bank + scrub
 //
 // Integration points with Ibex:
-//   1. IF stage → PMP fetch check (if_addr, if_valid → if_granted/if_fault)
-//   2. EX stage → PMP data check (ex_addr, ex_valid → ex_granted/ex_fault)
-//   3. EX stage → ecall detection → routes to Security Engine
-//   4. CSR instructions → CSR unit (standard + custom CSR access)
-//   5. mret instruction → CSR unit privilege restore + pipeline redirect
+//   1. IF stage -> PMP fetch check (if_addr, if_valid -> if_granted/if_fault)
+//   2. EX stage -> PMP data check (ex_addr, ex_valid -> ex_granted/ex_fault)
+//   3. EX stage -> ecall detection -> routes to Security Engine
+//   4. CSR instructions -> CSR unit (standard + custom CSR access)
+//   5. mret instruction -> CSR unit privilege restore + pipeline redirect
 // ============================================================================
 
 module tee_top
@@ -81,7 +81,7 @@ module tee_top
   output logic                    csr_illegal_o,
 
   // --------------------------------------------------------------------------
-  // Memory interface (simplified — for standalone testing)
+  // Memory interface (simplified - for standalone testing)
   // --------------------------------------------------------------------------
   output logic [ADDR_WIDTH-1:0]   dmem_addr_o,
   output logic [DATA_WIDTH-1:0]   dmem_wdata_o,
@@ -193,7 +193,7 @@ module tee_top
   end
 
   // ==========================================================================
-  // Trap generation (PMP faults → trap to M-mode)
+  // Trap generation (PMP faults -> trap to M-mode)
   // ==========================================================================
   always_comb begin
     trap_gen   = 1'b0;

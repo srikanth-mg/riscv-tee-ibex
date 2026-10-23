@@ -1,13 +1,13 @@
 // ============================================================================
-// tee_register_file.sv — Register File with TEE Extensions
+// tee_register_file.sv - Register File with TEE Extensions
 //
 // Standard 32x32 RISC-V register file (x0 hardwired to 0) with:
-//   1. Shadow register bank — parallel save/restore for host context
-//   2. Hardware scrub — zero all registers in one cycle
+//   1. Shadow register bank - parallel save/restore for host context
+//   2. Hardware scrub - zero all registers in one cycle
 //   3. Two read ports (rs1, rs2) + one write port (rd) for pipeline
 //   4. Bulk read port (all 31 regs) for SE context save
 //
-// x0 is always 0 — writes to x0 are discarded.
+// x0 is always 0 - writes to x0 are discarded.
 // ============================================================================
 
 module tee_register_file
@@ -20,7 +20,7 @@ module tee_register_file
   input  logic                    rst_ni,
 
   // --------------------------------------------------------------------------
-  // Pipeline read ports (combinational — reads in same cycle)
+  // Pipeline read ports (combinational - reads in same cycle)
   // --------------------------------------------------------------------------
   input  logic [4:0]              rs1_addr_i,
   output logic [DATA_WIDTH-1:0]   rs1_data_o,
@@ -38,10 +38,10 @@ module tee_register_file
   // --------------------------------------------------------------------------
   // TEE bulk interface (Security Engine)
   // --------------------------------------------------------------------------
-  // Bulk read — all registers at once (for context save)
+  // Bulk read - all registers at once (for context save)
   output logic [DATA_WIDTH-1:0]   bulk_rdata_o [1:31],
 
-  // Hardware scrub — zero all registers in one cycle
+  // Hardware scrub - zero all registers in one cycle
   input  logic                    scrub_i,
 
   // Restore from shadow bank
@@ -57,7 +57,7 @@ module tee_register_file
   // x0 is hardwired to 0 by gating: writes to rd_addr_i==0 are blocked, and
   // regs_q[0] is initialized to 0 on reset and never updated thereafter. The
   // synthesizer will optimize regs_q[0] to a constant tie (no FF inferred).
-  // No continuous assignment is used here — that would conflict with the
+  // No continuous assignment is used here - that would conflict with the
   // flip-flops inferred by the always_ff block, producing a multi-driver
   // warning.
 
@@ -66,10 +66,10 @@ module tee_register_file
   // Register Write Logic
   //
   // Priority (highest to lowest):
-  //   1. Reset → all zeros
-  //   2. Scrub → all zeros (one cycle, from SE)
-  //   3. Restore → load from shadow bank (one cycle, from SE)
-  //   4. Normal pipeline write → single register
+  //   1. Reset -> all zeros
+  //   2. Scrub -> all zeros (one cycle, from SE)
+  //   3. Restore -> load from shadow bank (one cycle, from SE)
+  //   4. Normal pipeline write -> single register
   // ==========================================================================
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -79,13 +79,13 @@ module tee_register_file
       end
     end else if (scrub_i) begin
       // HARDWARE SCRUB: Zero all registers in one cycle
-      // This is a security feature — prevents information leakage
+      // This is a security feature - prevents information leakage
       // between host and enclave during context switches.
       //
       // Implementation: one AND gate per register bit, gated by scrub signal.
       // When scrub=1, all write ports are driven to zero simultaneously.
       // Cost: negligible (one gate per flip-flop)
-      // Benefit: 31 cycles (software loop) → 1 cycle (hardware)
+      // Benefit: 31 cycles (software loop) -> 1 cycle (hardware)
       for (int i = 1; i < NUM_REGS; i++) begin
         regs_q[i] <= '0;
       end
@@ -103,7 +103,7 @@ module tee_register_file
   end
 
   // ==========================================================================
-  // Read Ports (combinational — data available same cycle)
+  // Read Ports (combinational - data available same cycle)
   // ==========================================================================
   // Pipeline read port 1 (rs1)
   assign rs1_data_o = (rs1_addr_i == 5'd0) ? '0 : regs_q[rs1_addr_i];

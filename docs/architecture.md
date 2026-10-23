@@ -8,10 +8,10 @@ The Security Engine (SE) is a 14-state Mealy machine. States are organized into 
 
 ```
 SE_IDLE
-  ├── CREATE_VALIDATE → CREATE_COMMIT ─────────────────────────► SE_IDLE
-  ├── ENTER_SAVE_CTX → ENTER_SCRUB → ENTER_PMP → ENTER_LAUNCH ─► SE_IDLE
-  ├── EXIT_REVOKE → EXIT_SCRUB → EXIT_RESTORE → EXIT_RETURN ───► SE_IDLE
-  ├── DESTROY_SCRUB → DESTROY_FREE ────────────────────────────► SE_IDLE
+  ├── CREATE_VALIDATE -> CREATE_COMMIT ─────────────────────────► SE_IDLE
+  ├── ENTER_SAVE_CTX -> ENTER_SCRUB -> ENTER_PMP -> ENTER_LAUNCH ─► SE_IDLE
+  ├── EXIT_REVOKE -> EXIT_SCRUB -> EXIT_RESTORE -> EXIT_RETURN ───► SE_IDLE
+  ├── DESTROY_SCRUB -> DESTROY_FREE ────────────────────────────► SE_IDLE
   └── FORWARD_SYSCALL (non-TEE ecall passthrough) ─────────────► SE_IDLE
 ```
 
@@ -122,7 +122,7 @@ This is *security by construction* rather than enforcement. A PMP rule guarding 
 | `0x305` | `mtvec` | 32-bit | M-mode trap vector |
 | `0x341` | `mepc` | 32-bit | M-mode exception PC |
 | `0x342` | `mcause` | 32-bit | M-mode trap cause |
-| `0x302` | `medeleg` | 32-bit | Trap delegation (Ibex has no S-mode → unused) |
+| `0x302` | `medeleg` | 32-bit | Trap delegation (Ibex has no S-mode -> unused) |
 | `0x3A0`-`0x3A3` | `pmpcfg0-3` | 32-bit each | PMP config (4 × 8-bit) |
 | `0x3B0`-`0x3BF` | `pmpaddr0-15` | 32-bit each | PMP entry addresses |
 
@@ -135,7 +135,7 @@ This is *security by construction* rather than enforcement. A PMP rule guarding 
 | `0x7C2` | `menclavebase` | 32-bit | Active enclave base address |
 | `0x7C3` | `menclavebound` | 32-bit | Active enclave upper bound |
 
-All four custom CSRs are M-mode read/write only. U-mode reads return zero; U-mode writes raise `TRAP_ILLEGAL_INST`. The SE writes these through a sideband path during FSM transitions — no software in the loop.
+All four custom CSRs are M-mode read/write only. U-mode reads return zero; U-mode writes raise `TRAP_ILLEGAL_INST`. The SE writes these through a sideband path during FSM transitions - no software in the loop.
 
 The choice to allocate four CSRs (rather than packing the metadata into one) reflects RISC-V CSR access semantics: each CSR access is a single instruction (`csrr` / `csrw`) and packing multiple fields into one CSR would require multi-instruction software sequences to read/update individual fields.
 
